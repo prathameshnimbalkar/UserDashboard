@@ -1,0 +1,172 @@
+import React, {useEffect, useState} from 'react';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import FormStepper from "./Stepper/FormStepper";
+import { Sidebar } from './Sidebar/Sidebar';
+import { FormProvider, useFormContext } from './Helper/FormContext';
+import { useNavigation} from '../Components/Helper/NavigationContext';
+import ConfirmModal from '../Components/Helper/confirmModal';
+
+
+type User = {
+  name: string;
+  gender: string;
+  age: number | null;
+  collegeName: string;
+  location: string;
+  branch: string;
+  SpocName: string;
+  relation: string;
+};
+
+const Dashboard = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { formData,setFormData, visited, setVisited, setTriggerValidation, currentStep, setCurrentStep, hasUnsavedChanges, setHasUnsavedChanges } = useFormContext();
+
+  const {data, edit} =  useNavigation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pendingNavigation, setPendingNavigation] = useState<string | null>(null);
+  console.log("nbvcx",data)
+  const validation: { [key: number]: (keyof User)[] } = {
+    0: ['name', 'gender', 'age'], 
+    1: ['collegeName', 'location', 'branch'], 
+    2: ['SpocName', 'relation'], 
+  };
+
+  const checkStepValidity = (step: number) => {
+    const requiredFields = validation[step] || [];
+    return requiredFields.every(field => formData[field] !== null && formData[field] !== '');
+  };
+
+  useEffect(() => {
+    const newVisited = [...visited];
+    newVisited[currentStep] = true;
+    setVisited(newVisited);
+
+    if (edit) {
+      const userData: Partial<User> = JSON.parse(JSON.stringify(data));
+      setFormData(userData);
+    }
+  }, [currentStep]);
+
+  useEffect(() => {
+    // Handle unsaved changes warning on navigation
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (hasUnsavedChanges) {
+        event.preventDefault();
+        event.returnValue = ''; // For some browsers
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [hasUnsavedChanges]);
+
+
+
+    const checkAllPreviousStepsCompleted = (step: number) => {
+    return visited.slice(0, step).every(isVisited => isVisited);
+  };
+  const paths = ['/one', '/two', '/three'];
+
+  const handleStepChange = (step: number) => {
+    setTriggerValidation(true);
+
+    if (hasUnsavedChanges) {
+      // Show confirmation modal if there are unsaved changes
+      setPendingNavigation(paths[step]);
+      setIsModalOpen(true);
+    } else {
+      // Navigate directly if no unsaved changes
+      const newVisited = [...visited];
+      newVisited[step] = true;
+      setVisited(newVisited);
+      setCurrentStep(step);
+      setTriggerValidation(false);
+      navigate(paths[step]);
+    }
+  };
+
+  const handleConfirmNavigation = () => {
+    // Confirm navigation and proceed to the pending route
+    if (pendingNavigation) {
+      setIsModalOpen(false);
+      setHasUnsavedChanges(false); // Reset unsaved changes status
+      navigate(pendingNavigation);
+    }
+  };
+
+  const handleCancelNavigation = () => {
+    // Cancel the navigation and stay on the current route
+    setIsModalOpen(false);
+    setPendingNavigation(null);
+  };
+
+  useEffect(() => {
+    const newVisited = [...visited];
+    newVisited[currentStep] = true;
+    setVisited(newVisited);
+  }, [currentStep]);
+
+  const getButtonColor = (index: number) => {
+    if (index === currentStep) {
+      return 'gray'; 
+    } else if (visited[index]) {
+      if (visited && !checkStepValidity(index)) {
+        return 'red'; 
+      } else if (checkStepValidity(index)) {
+        return 'blue'; 
+      }
+      return 'gray';
+    }
+    return 'rgba(75, 40, 109, 1)'; 
+  };
+
+  const isButtonDisabled = (index: number) => {
+    return index > currentStep && !checkAllPreviousStepsCompleted(index);
+  };
+
+
+
+  return (
+    <div style={{ display: 'flex' }}>
+      <Sidebar />
+      <div style={{ flexGrow: 1 }}>
+        <FormStepper 
+          steps={['S-1', 'S-2', 'S-3']} 
+          currentStep={currentStep}
+          visited={visited}
+          handleStepChange={handleStepChange}
+          getButtonColor={getButtonColor}
+          isButtonDisabled={isButtonDisabled}
+        />
+        {location.pathname === '/' && 
+          <div className='mainContainer'>
+            <h1 className='welcomeText'>Welcome to User Dashboard</h1>
+            <button className='btn' onClick={() => navigate('/one')}>Get started</button>
+          </div>
+        }
+        <Outlet />
+         
+         <ConfirmModal 
+          isOpen={isModalOpen} 
+          onConfirm={handleConfirmNavigation} 
+          onCancel={handleCancelNavigation} 
+          message="You have unsaved changes. Do you want to proceed without saving?" 
+        />
+      </div>
+    </div>
+  );
+};
+
+
+export const DashboardView = () => {
+  return (
+    <FormProvider>
+      <Dashboard/>
+    </FormProvider>
+  )
+}

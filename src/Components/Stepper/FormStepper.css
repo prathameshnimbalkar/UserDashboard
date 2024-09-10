@@ -1,0 +1,39 @@
+.main-container{
+    border: 1px solid rgb(214, 212, 212);
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 200px;
+    margin-top: 40px;
+}
+.button-stepper{
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: none;
+    /* background-color: rgba(75, 40, 109, 1);  */
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+}
+.button-stepper:disabled{
+  background-color: rgba(75, 40, 109, 1) !important;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+/* .not-visited {
+    background-color: rgb(129, 9, 203);
+  }
+  
+.visited {
+    background-color: gray;
+  }
+  
+.complete {
+    background-color: blue;
+    color: white;
+  }
+  
+ .incomplete {
+    background-color: red;
+    color: white;
+  }
+   */

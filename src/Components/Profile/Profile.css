@@ -1,0 +1,148 @@
+.profile-container{
+    border: 1px solid rgb(211, 207, 207) !important;
+    border-radius: 5px;
+    height: auto;
+    width: auto;
+    margin: 30px 10px 0px 0px;
+    padding: 10px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.05);
+}
+h2{
+    text-align: center;
+    size: 3px;
+    margin-top: 5px;
+    font-weight: 500;
+    color: rgba(75, 40, 109, 1); 
+}
+.details-section{
+    display: flex;
+    justify-content: center;  
+    gap: 10px;
+    flex-wrap: wrap;
+}   
+.user-details{
+    background-color: rgba(96, 0, 128, 0.073);
+    border: 1px solid rgba(74, 40, 109, 0.231);;
+    border-radius: 5px;
+    padding: 10px 40px 10px 40px;
+    width: 200px;
+    max-width: 300px;  
+    height: auto; 
+    gap: 40px;
+}
+.user-details p{
+    word-wrap:break-word;
+    color: rgb(79, 78, 78);
+    text-transform: capitalize;
+}
+.user-details strong{
+    color: rgb(65, 41, 71);
+    font-size: 15px;
+}
+.main-loading{
+   display: flex !important;
+}
+.loading{
+    color: rgba(75, 40, 109, 1);
+    text-align: center;
+    margin-top: 200px;
+    font-size: 30px;
+    width: 100%;
+}
+
+.delete{
+    background-color: rgb(167, 18, 18) ;
+    color: white;
+    border-radius: 3px;
+    border: none;
+    padding: 5px 8px 5px 8px; 
+    margin-right: 6px;
+    min-width: 55px;
+    min-height: 26px;
+}
+.spinner {
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #ffffff;
+    animation: spin 1s ease infinite;
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+.edit {
+    background-color: rgba(75, 40, 109, 1); ;
+    color: white;
+    border-radius: 3px;
+    border: none;
+    padding: 5px 8px 5px 8px; 
+}
+
+
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+  }
+  
+  .popup {
+    background-color: white;
+    padding: 20px 80px;
+    border-radius: 10px;
+    max-width: 300px;
+    width: 140px;
+   
+  }
+  
+  .popup-header {
+text-align: center;
+font-weight: 500;
+font-size: 20px;
+    margin-bottom: 20px;
+  }
+  
+  
+  .button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .confirm-button, .cancel-button {
+    padding: 8px 15px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .confirm-button {
+    background-color: rgba(75, 40, 109, 1);
+    color: white;
+  }
+  
+  .cancel-button {
+    background-color: #ffffff;
+    color: black;
+    border: 2px solid rgba(75, 40, 109, 1);
+  }
